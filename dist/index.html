@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#080807" />
+    <meta name="description" content="A cinematic 3D photography gallery controlled by hand gestures, touch, mouse, or keyboard." />
+    <title>Hand Gallery Lab — Studies in Stillness</title>
+    <link rel="preconnect" href="https://images.unsplash.com" crossorigin />
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main id="app" class="app" data-mode="lab">
+      <div class="ambient" aria-hidden="true"></div>
+
+      <header class="topbar">
+        <a class="brand" href="#" aria-label="Hand Gallery Lab home">
+          <span class="brand-mark">HG</span>
+          <span><strong>Hand Gallery</strong><small>Experimental Archive / 01</small></span>
+        </a>
+        <div class="topbar-actions">
+          <button id="modeButton" class="text-button" type="button" aria-pressed="false">Clean view</button>
+          <button id="fullscreenButton" class="icon-button" type="button" aria-label="Enter fullscreen" title="Enter fullscreen">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H3v5M16 3h5v5M8 21H3v-5M16 21h5v-5"/></svg>
+          </button>
+        </div>
+      </header>
+
+      <section class="gallery-stage" aria-label="Interactive 3D photography gallery">
+        <div class="gallery-viewport" id="galleryViewport">
+          <div class="gallery-scene" id="galleryScene" role="list"></div>
+        </div>
+        <div class="focus-reticle" aria-hidden="true"><i></i><span>Selected frame</span></div>
+        <div id="dragHint" class="drag-hint" aria-hidden="true"><span>Drag</span><i></i><span>Explore</span></div>
+      </section>
+
+      <aside class="status-card lab-only" aria-label="Live tracking data">
+        <div class="panel-kicker"><span>Live input</span><span id="fpsValue">— FPS</span></div>
+        <div class="gesture-readout">
+          <span id="gestureIcon" class="gesture-icon">—</span>
+          <div><small>Gesture</small><strong id="gestureValue">NO HAND</strong></div>
+        </div>
+        <dl class="metrics">
+          <div><dt>Hand X</dt><dd id="handXValue">—</dd></div>
+          <div><dt>Hand Y</dt><dd id="handYValue">—</dd></div>
+          <div><dt>Rotation</dt><dd id="rotationValue">0°</dd></div>
+          <div><dt>Velocity</dt><dd id="speedValue">0.00</dd></div>
+          <div><dt>Tilt</dt><dd id="tiltValue">0°</dd></div>
+          <div><dt>Confidence</dt><dd id="confidenceValue">—</dd></div>
+        </dl>
+      </aside>
+
+      <aside id="debugPanel" class="debug-panel lab-only" aria-label="Gallery configuration">
+        <div class="panel-heading">
+          <div><span class="eyebrow">Calibration</span><h2>Fine tune</h2></div>
+          <button id="panelToggle" class="icon-button small" aria-expanded="true" aria-label="Collapse settings">−</button>
+        </div>
+        <div id="debugControls" class="debug-controls"></div>
+      </aside>
+
+      <div class="camera-card lab-only" id="cameraCard">
+        <video id="cameraPreview" playsinline muted aria-label="Mirrored hand tracking camera preview"></video>
+        <canvas id="landmarkCanvas" aria-hidden="true"></canvas>
+        <div class="camera-empty" id="cameraEmpty"><span>Camera preview</span><small>Starts only with permission</small></div>
+        <button id="hideCameraButton" class="camera-hide" type="button">Hide</button>
+      </div>
+
+      <div class="bottom-ui">
+        <div class="tracking-pill" id="trackingPill" data-state="idle">
+          <i></i><span id="trackingStatus">Tracking inactive</span>
+        </div>
+        <div class="control-dock">
+          <button id="trackingButton" class="primary-button" type="button"><span>Enable hand tracking</span><b>↗</b></button>
+          <button id="resetButton" class="dock-button lab-only" type="button">Reset</button>
+          <button id="cameraButton" class="dock-button lab-only" type="button">Camera</button>
+        </div>
+        <p class="gesture-hints"><span>✋ Palm <b>rotate</b></span><span>✊ Fist <b>hold</b></span><span>↕ Move <b>tilt</b></span></p>
+      </div>
+
+      <section id="entryOverlay" class="entry-overlay" aria-labelledby="entryTitle">
+        <div class="entry-grain" aria-hidden="true"></div>
+        <div class="entry-content">
+          <p class="eyebrow">An interactive photo study</p>
+          <h1 id="entryTitle">Studies in<br><em>stillness.</em></h1>
+          <p class="entry-lede">Move through a collection of quiet moments with your hand—or simply drag to explore.</p>
+          <div class="entry-actions">
+            <button id="startButton" class="enter-button" type="button"><span>Enter with hand tracking</span><i>✋</i></button>
+            <button id="mouseButton" class="mouse-button" type="button">Continue with mouse / touch</button>
+          </div>
+          <p class="privacy"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-2.8 8.4-7 10-4.2-1.6-7-5.5-7-10V6l7-3z"/></svg> Camera frames stay on this device. Nothing is recorded or uploaded.</p>
+        </div>
+        <div class="entry-index" aria-hidden="true">01 / 12</div>
+      </section>
+
+      <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+      <dialog id="focusDialog" class="focus-dialog">
+        <button id="closeFocusButton" class="focus-close" type="button" aria-label="Close focused photograph">Close <span>×</span></button>
+        <figure>
+          <img id="focusImage" alt="" />
+          <figcaption><span id="focusIndex">01</span><div><h2 id="focusTitle"></h2><p id="focusMeta"></p></div></figcaption>
+        </figure>
+      </dialog>
+    </main>
+    <noscript>This gallery requires JavaScript. The photographs remain available after JavaScript is enabled.</noscript>
+    <script type="module" src="./js/main.js"></script>
+  </body>
+</html>
