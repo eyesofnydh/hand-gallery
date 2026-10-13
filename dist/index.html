@@ -20,6 +20,10 @@
           <span><strong>Hand Gallery</strong><small>Experimental Archive / 01</small></span>
         </a>
         <div class="topbar-actions">
+          <button id="helpButton" class="text-button help-button" type="button" aria-expanded="false"><span>How to use</span><b>?</b></button>
+          <button id="settingsButton" class="icon-button lab-only" type="button" aria-label="Open gallery settings" aria-expanded="false" title="Gallery settings">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 0 0-.1-1l2-1.5-2-3.4-2.3 1a8 8 0 0 0-1.7-1L14.6 3h-4l-.4 3.1a8 8 0 0 0-1.7 1l-2.3-1-2 3.4 2 1.5a7 7 0 0 0 0 2l-2 1.5 2 3.4 2.3-1a8 8 0 0 0 1.7 1l.4 3.1h4l.4-3.1a8 8 0 0 0 1.7-1l2.3 1 2-3.4-2-1.5a7 7 0 0 0 .1-1z"/></svg>
+          </button>
           <button id="modeButton" class="text-button" type="button" aria-pressed="false">Clean view</button>
           <button id="fullscreenButton" class="icon-button" type="button" aria-label="Enter fullscreen" title="Enter fullscreen">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H3v5M16 3h5v5M8 21H3v-5M16 21h5v-5"/></svg>
@@ -32,8 +36,25 @@
           <div class="gallery-scene" id="galleryScene" role="list"></div>
         </div>
         <div class="focus-reticle" aria-hidden="true"><i></i><span>Selected frame</span></div>
-        <div id="dragHint" class="drag-hint" aria-hidden="true"><span>Drag</span><i></i><span>Explore</span></div>
+        <div id="coachmark" class="coachmark" role="status">
+          <span id="coachIcon" class="coach-icon">↔</span>
+          <div><strong id="coachTitle">Drag to browse</strong><small id="coachText">Move sideways to rotate · move up or down to tilt · tap the centre photo to open</small></div>
+          <button id="coachClose" type="button" aria-label="Dismiss instructions">×</button>
+        </div>
       </section>
+
+      <aside id="guidePanel" class="guide-panel" aria-hidden="true" aria-labelledby="guideTitle">
+        <div class="guide-heading"><div><span class="eyebrow">Quick guide</span><h2 id="guideTitle">How to explore</h2></div><button id="guideClose" class="icon-button small" type="button" aria-label="Close instructions">×</button></div>
+        <ol class="guide-steps">
+          <li><span>01</span><i>✋</i><div><strong>Open your palm</strong><small>Hold it in view to rotate. Move left or right to choose the direction and speed.</small></div></li>
+          <li><span>02</span><i>✊</i><div><strong>Make a fist to pause</strong><small>The wheel holds exactly where it is. Open your palm again to continue.</small></div></li>
+          <li><span>03</span><i>↕</i><div><strong>Move up and down</strong><small>Your hand height gently changes the viewing angle.</small></div></li>
+          <li><span>04</span><i>◎</i><div><strong>Pinch to open</strong><small>Pinch thumb and index finger, or click the centred image, to view it full-screen.</small></div></li>
+        </ol>
+        <div class="guide-fallback"><span>Without a camera</span><p><b>Drag</b> to rotate and tilt · <b>Arrow keys</b> to step · <b>Enter</b> to open · <b>Esc</b> to close</p></div>
+        <button id="guideDone" class="guide-done" type="button">Got it — start exploring</button>
+      </aside>
+      <button id="guideScrim" class="guide-scrim" type="button" aria-label="Close instructions" tabindex="-1"></button>
 
       <aside class="status-card lab-only" aria-label="Live tracking data">
         <div class="panel-kicker"><span>Live input</span><span id="fpsValue">— FPS</span></div>
@@ -83,10 +104,11 @@
         <div class="entry-content">
           <p class="eyebrow">An interactive photo study</p>
           <h1 id="entryTitle">Studies in<br><em>stillness.</em></h1>
-          <p class="entry-lede">Move through a collection of quiet moments with your hand—or simply drag to explore.</p>
+          <p class="entry-lede">Move through a collection of quiet moments. Choose hand tracking for gestures, or continue instantly with touch and mouse.</p>
+          <div class="entry-gestures" aria-label="Hand gesture instructions"><span><i>✋</i><b>Open palm</b><small>Rotate</small></span><span><i>✊</i><b>Make a fist</b><small>Pause</small></span><span><i>↕</i><b>Move vertically</b><small>Change angle</small></span></div>
           <div class="entry-actions">
             <button id="startButton" class="enter-button" type="button"><span>Enter with hand tracking</span><i>✋</i></button>
-            <button id="mouseButton" class="mouse-button" type="button">Continue with mouse / touch</button>
+            <button id="mouseButton" class="mouse-button" type="button">Use mouse / touch instead <span>→</span></button>
           </div>
           <p class="privacy"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-2.8 8.4-7 10-4.2-1.6-7-5.5-7-10V6l7-3z"/></svg> Camera frames stay on this device. Nothing is recorded or uploaded.</p>
         </div>
