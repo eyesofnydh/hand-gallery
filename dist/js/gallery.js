@@ -1,7 +1,7 @@
 export class Gallery {
   constructor(scene, viewport, photos, config, onFocus) {
     this.scene = scene; this.viewport = viewport; this.photos = photos; this.config = config; this.onFocus = onFocus;
-    this.cards = []; this.activeIndex = 0; this.pointer = null; this.lastX = 0; this.lastY = 0; this.dragged = 0;
+    this.cards = []; this.activeIndex = 0; this.previousActive = -1; this.pointer = null; this.lastX = 0; this.lastY = 0; this.dragged = 0;
     this.build(); this.bind(); this.layout();
   }
   build() {
@@ -27,6 +27,7 @@ export class Gallery {
     const step = 360 / this.cards.length;
     const normalized = ((-rotation % 360) + 360) % 360;
     this.activeIndex = Math.round(normalized / step) % this.cards.length;
+    if (this.activeIndex !== this.previousActive) { this.previousActive = this.activeIndex; this.onActiveChange?.(this.activeIndex); }
     this.cards.forEach((card, i) => {
       const delta = Math.abs((((i * step + rotation + 180) % 360) + 360) % 360 - 180);
       card.dataset.active = String(i === this.activeIndex);

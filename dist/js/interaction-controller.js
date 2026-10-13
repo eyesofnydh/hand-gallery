@@ -15,10 +15,12 @@ export class InteractionController {
     this.candidate = 'NO HAND';
     this.candidateFrames = 0;
     this.dragging = false;
+    this.snapTarget = null;
     this.lastPinchAt = 0;
     this.reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
   }
   updateHand({ x, y, gesture }) {
+    this.snapTarget = null;
     const cfg = this.config;
     const px = cfg.tracking.mirrorInput ? 1 - x : x;
     this.handX = this.handX == null ? px : lerp(this.handX, px, .22);
@@ -38,14 +40,16 @@ export class InteractionController {
     }
   }
   noHand() { this.gesture = 'NO HAND'; this.candidate = 'NO HAND'; this.candidateFrames = 0; this.handX = this.handY = null; this.targetSpeed = 0; }
-  drag(dx, dy) { this.rotation += dx * .18; this.targetSpeed = dx * .025; this.targetTilt = clamp(this.targetTilt - dy * .16, this.config.tilt.min, this.config.tilt.max); }
-  nudge(rotation, tilt = 0) { this.rotation += rotation; this.targetTilt = clamp(this.targetTilt + tilt, this.config.tilt.min, this.config.tilt.max); }
-  reset() { this.rotation = 0; this.tilt = 0; this.targetTilt = 0; this.speed = 0; this.targetSpeed = this.config.rotation.baseSpeed; }
+  drag(dx, dy) { this.snapTarget = null; this.rotation += dx * .18; this.targetSpeed = dx * .025; this.targetTilt = clamp(this.targetTilt - dy * .16, this.config.tilt.min, this.config.tilt.max); }
+  nudge(rotation, tilt = 0) { this.snapTarget = null; this.rotation += rotation; this.targetTilt = clamp(this.targetTilt + tilt, this.config.tilt.min, this.config.tilt.max); }
+  snapTo(index, count) { const target = -index * 360 / count; const turns = Math.round((this.rotation - target) / 360); this.snapTarget = target + turns * 360; this.targetSpeed = 0; }
+  reset() { this.rotation = 0; this.tilt = 0; this.targetTilt = 0; this.speed = 0; this.targetSpeed = this.config.rotation.baseSpeed; this.snapTarget = null; }
   frame(dt) {
     const rm = this.reducedMotion ? .2 : 1;
     this.speed = lerp(this.speed, this.targetSpeed * rm, this.config.rotation.damping);
     this.tilt = lerp(this.tilt, this.targetTilt, this.config.tilt.damping);
-    if (!this.dragging) this.rotation += this.speed * Math.min(dt, 2);
+    if (!this.dragging && this.snapTarget != null) { this.rotation = lerp(this.rotation, this.snapTarget, .16); if (Math.abs(this.rotation - this.snapTarget) < .03) { this.rotation = this.snapTarget; this.snapTarget = null; } }
+    else if (!this.dragging) this.rotation += this.speed * Math.min(dt, 2);
     return { rotation: this.rotation, tilt: this.tilt, speed: this.speed };
   }
 }

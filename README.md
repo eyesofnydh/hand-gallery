@@ -24,6 +24,8 @@ No install or build step is required. The first hand-tracking session loads Medi
 - Arrow keys: rotate and tilt; Enter opens the active image; Escape closes it.
 - The **How to use** menu explains every gesture and fallback control at any time.
 - On small screens, use the gear button to open or close the live calibration controls.
+- Previous/next buttons and the progress rail snap the wheel cleanly between photographs.
+- Focus mode includes full keyboard and on-screen navigation through the collection.
 
 ## Architecture
 

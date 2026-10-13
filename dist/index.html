@@ -13,6 +13,7 @@
   <body>
     <main id="app" class="app" data-mode="lab">
       <div class="ambient" aria-hidden="true"></div>
+      <div class="ambient-title" aria-hidden="true">STILLNESS</div>
 
       <header class="topbar">
         <a class="brand" href="#" aria-label="Hand Gallery Lab home">
@@ -40,6 +41,11 @@
           <span id="coachIcon" class="coach-icon">↔</span>
           <div><strong id="coachTitle">Drag to browse</strong><small id="coachText">Move sideways to rotate · move up or down to tilt · tap the centre photo to open</small></div>
           <button id="coachClose" type="button" aria-label="Dismiss instructions">×</button>
+        </div>
+        <div class="collection-nav" aria-label="Gallery navigation">
+          <div class="collection-current"><span id="activeIndex">01</span><div><strong id="activeTitle">After Rain</strong><small id="activeMeta">Tokyo · Study 01</small></div></div>
+          <div class="collection-progress"><i id="progressFill"></i></div>
+          <div class="collection-actions"><button id="prevButton" type="button" aria-label="Previous photograph">←</button><span id="collectionCount">01 / 12</span><button id="nextButton" type="button" aria-label="Next photograph">→</button></div>
         </div>
       </section>
 
@@ -119,6 +125,8 @@
 
       <dialog id="focusDialog" class="focus-dialog">
         <button id="closeFocusButton" class="focus-close" type="button" aria-label="Close focused photograph">Close <span>×</span></button>
+        <button id="focusPrev" class="focus-arrow focus-prev" type="button" aria-label="Previous photograph">←</button>
+        <button id="focusNext" class="focus-arrow focus-next" type="button" aria-label="Next photograph">→</button>
         <figure>
           <img id="focusImage" alt="" />
           <figcaption><span id="focusIndex">01</span><div><h2 id="focusTitle"></h2><p id="focusMeta"></p></div></figcaption>
